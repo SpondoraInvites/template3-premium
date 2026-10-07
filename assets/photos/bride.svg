@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="960" viewBox="0 0 720 960" role="img" aria-label="Placeholder artwork — bride">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4b130f"/>
+      <stop offset="1" stop-color="#2b0a08"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7e5ab"/>
+      <stop offset="0.4" stop-color="#e8c476"/>
+      <stop offset="0.64" stop-color="#c9993f"/>
+      <stop offset="1" stop-color="#a3762c"/>
+    </linearGradient>
+    <g id="paisley">
+      <path d="M26 3 C34 8 38 17 36 26 C33.5 38 24 46 13.5 43 C4 40.5 0 30 5.5 21.5 C9.5 15.5 17 15 20.5 20 C18 15.5 20 9 26 3 Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M22 12 C15 17 12.5 25 16 31 C19 35.5 25 34 25 29 C25 25 21.5 24 20 26.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+      <circle cx="29" cy="21" r="1.7" fill="currentColor"/><circle cx="13" cy="30" r="1.2" fill="currentColor"/>
+    </g>
+  </defs>
+
+  <rect width="720" height="960" fill="url(#bg)"/>
+  <rect x="26" y="26" width="668" height="908" fill="none" stroke="#d3a24f" stroke-opacity="0.85" stroke-width="2"/>
+  <rect x="40" y="40" width="640" height="880" fill="none" stroke="#d3a24f" stroke-opacity="0.4" stroke-width="1"/>
+
+  <!-- paisley corner flourishes -->
+  <g color="#d3a24f" opacity="0.75">
+    <use href="#paisley" transform="translate(52 108) rotate(90) scale(1.7)"/>
+    <use href="#paisley" transform="translate(668 52) scale(-1 1) rotate(90) scale(1.7)"/>
+    <use href="#paisley" transform="translate(52 852) scale(1.7)"/>
+    <use href="#paisley" transform="translate(668 908) scale(-1 1) scale(1.7)"/>
+  </g>
+
+  <!-- crescent arch of leaves above the monogram -->
+  <g fill="none" stroke="url(#gold)" stroke-width="2.5" stroke-linecap="round">
+    <path d="M250 268 C300 208 420 208 470 268"/>
+    <g fill="url(#gold)" stroke="none" opacity="0.9">
+      <path d="M262 250 C270 234 284 226 300 226 C294 242 280 250 262 250 Z"/>
+      <path d="M316 218 C330 208 348 206 362 212 C350 226 332 228 316 218 Z"/>
+      <path d="M376 212 C392 210 408 216 418 228 C402 232 386 226 376 212 Z"/>
+      <path d="M438 246 C452 238 468 238 480 246 C466 258 450 258 438 246 Z"/>
+    </g>
+    <circle cx="360" cy="196" r="6" fill="url(#gold)" stroke="none"/>
+  </g>
+
+  <!-- monogram -->
+  <text x="360" y="560" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="330" fill="url(#gold)">M</text>
+  <text x="360" y="640" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="26" letter-spacing="14" fill="#d3a24f" fill-opacity="0.8">BRIDE</text>
+
+  <!-- blossom sprig -->
+  <g fill="none" stroke="url(#gold)" stroke-width="2.5" stroke-linecap="round">
+    <path d="M300 740 C330 720 390 720 420 740"/>
+    <circle cx="286" cy="744" r="9"/>
+    <circle cx="286" cy="744" r="3.5" fill="url(#gold)" stroke="none"/>
+    <circle cx="434" cy="744" r="9"/>
+    <circle cx="434" cy="744" r="3.5" fill="url(#gold)" stroke="none"/>
+    <circle cx="360" cy="718" r="11"/>
+    <circle cx="360" cy="718" r="4" fill="url(#gold)" stroke="none"/>
+  </g>
+
+  <!-- scattered florets -->
+  <g fill="#d3a24f">
+    <circle cx="150" cy="500" r="4" opacity="0.5"/><circle cx="120" cy="620" r="3" opacity="0.4"/>
+    <circle cx="580" cy="470" r="4" opacity="0.5"/><circle cx="612" cy="640" r="3" opacity="0.4"/>
+    <circle cx="200" cy="820" r="3" opacity="0.4"/><circle cx="530" cy="830" r="3" opacity="0.4"/>
+  </g>
+</svg>
