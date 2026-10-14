@@ -200,108 +200,39 @@ function frame(){
 if(!RM)requestAnimationFrame(frame);
 
 /* =========================================================
-   3. Generative melody — plucked strings (Web Audio)
+   3. Background music — looping nasheed (audio file)
    ========================================================= */
-let engine=null,musicOn=false;
 const musicBtn=$('#musicBtn');
-function impulse(actx,sec,decay){
-  const rate=actx.sampleRate,len=Math.floor(rate*sec),buf=actx.createBuffer(2,len,rate);
-  for(let c=0;c<2;c++){const d=buf.getChannelData(c);
-    for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,decay);}
-  return buf;
+const MUSIC={src:(CFG.music&&CFG.music.src)||'assets/music/nafsiji.mp3',
+             volume:(CFG.music&&typeof CFG.music.volume==='number')?CFG.music.volume:.6};
+let audio=null,musicOn=false;
+function ensureAudio(){
+  if(audio)return audio;
+  audio=new Audio(MUSIC.src);
+  audio.loop=true;audio.preload='auto';audio.volume=0;
+  return audio;
 }
-const KS_CACHE={};
-function ksBuffer(actx,midi,dur,damp){
-  const key=midi+'|'+damp;
-  if(KS_CACHE[key])return KS_CACHE[key];
-  const freq=440*Math.pow(2,(midi-69)/12);
-  const sr=actx.sampleRate,N=Math.max(2,Math.round(sr/freq)),len=Math.floor(sr*dur);
-  const buf=actx.createBuffer(1,len,sr),d=buf.getChannelData(0);
-  const ring=new Float32Array(N);
-  for(let i=0;i<N;i++)ring[i]=Math.random()*2-1;
-  let idx=0;
-  for(let i=0;i<len;i++){
-    d[i]=ring[idx];
-    ring[idx]=damp*.5*(ring[idx]+ring[(idx+1)%N]);
-    idx=(idx+1)%N;
-  }
-  KS_CACHE[key]=buf;
-  return buf;
-}
-const SCALE=[60,62,64,66,67,69,71,72,74,76,79];
-const MOTIFS=[
-  [[0,2],[1,1],[2,1],[3,2],[4,1],[3,1],[2,2]],
-  [[3,1],[4,1],[5,1],[6,2],[7,1],[6,1],[5,1],[3,2]],
-  [[7,1],[6,1],[5,1],[4,1],[3,1],[2,1],[1,1],[0,2]],
-  [[4,2],[5,1],[6,1],[7,1],[8,2],[7,1],[5,2]],
-  [[2,2],[3,1],[4,3],[2,1],[1,1],[0,2]],
-  [[7,2],[8,1],[9,2],[8,1],[7,1],[6,1],[5,1],[3,2]],
-];
-function buildEngine(){
-  const actx=new (window.AudioContext||window.webkitAudioContext)();
-  const master=actx.createGain();master.gain.value=.8;master.connect(actx.destination);
-  const conv=actx.createConvolver();conv.buffer=impulse(actx,2.4,2.6);
-  const wet=actx.createGain();wet.gain.value=.3;conv.connect(wet);wet.connect(master);
-  const bus=actx.createGain();bus.gain.value=1;
-  bus.connect(master);bus.connect(conv);
-  const E=.46;
-  function pluck(midi,when,vel,dur,damp,pan){
-    const g=actx.createGain();
-    g.gain.setValueAtTime(0,when);
-    g.gain.linearRampToValueAtTime(vel,when+.008);
-    g.gain.exponentialRampToValueAtTime(.0002,when+dur);
-    let out=g;
-    if(actx.createStereoPanner){const p=actx.createStereoPanner();p.pan.value=pan;g.connect(p);out=p;}
-    out.connect(bus);
-    const s1=actx.createBufferSource();s1.buffer=ksBuffer(actx,midi,dur,damp);s1.connect(g);
-    const s2=actx.createBufferSource();s2.buffer=ksBuffer(actx,midi,dur,damp);s2.playbackRate.value=1.0016;
-    const g2=actx.createGain();g2.gain.value=.55;s2.connect(g2);g2.connect(g);
-    s1.start(when);s2.start(when);
-  }
-  const state={t:actx.currentTime+.3,motif:null,i:0,wait:2,last:-1,droneT:actx.currentTime+.3,di:0};
-  const DRONE=[43,48,48,36];
-  setInterval(()=>{
-    if(actx.state!=='running')return;
-    const horizon=actx.currentTime+1.4;
-    while(state.droneT<horizon){
-      const m=DRONE[state.di%4];
-      pluck(m,state.droneT,state.di%4===3?.075:.05,4.2,.9985,(state.di%2?-.3:.3));
-      state.droneT+=E*4;state.di++;
-    }
-    while(state.t<horizon){
-      if(state.wait>0){
-        if(Math.random()<.2){
-          const deg=7+Math.floor(Math.random()*4);
-          pluck(SCALE[deg],state.t,.045,1.6,.994,Math.random()-.5);
-        }
-        state.wait--;state.t+=E;continue;
-      }
-      if(!state.motif){
-        let mi;do{mi=Math.floor(Math.random()*MOTIFS.length);}while(mi===state.last);
-        state.last=mi;state.motif=MOTIFS[mi];state.i=0;
-      }
-      const [deg,dur]=state.motif[state.i];
-      const vel=state.i===0?.15:(dur>1?.125:.105);
-      pluck(SCALE[deg],state.t,vel,2.4,.9962,(state.i%6)/6-.5);
-      if(Math.random()<.3&&deg>0&&state.t-.06>actx.currentTime+.02)
-        pluck(SCALE[deg-1],state.t-.06,.04,.8,.994,(state.i%6)/6-.5);
-      state.t+=dur*E;state.i++;
-      if(state.i>=state.motif.length){state.motif=null;state.wait=2+Math.floor(Math.random()*4);}
-    }
-  },300);
-  return {actx,state};
+function fadeTo(target,done){
+  if(!audio)return;
+  const from=audio.volume,t0=performance.now(),dur=650;
+  (function step(now){
+    const k=Math.min(1,(now-t0)/dur);
+    audio.volume=Math.max(0,Math.min(1,from+(target-from)*k));
+    if(k<1)requestAnimationFrame(step);
+    else if(done)done();
+  })(t0);
 }
 function setMusic(on){
   musicOn=on;musicBtn.classList.toggle('on',on);
   musicBtn.title=on?'Pause the melody':'Play the melody';
-  if(!engine)return;
+  if(!audio)return;
   if(on){
-    if(engine.state.t<engine.actx.currentTime+.1)engine.state.t=engine.actx.currentTime+.1;
-    if(engine.state.droneT<engine.actx.currentTime+.1)engine.state.droneT=engine.actx.currentTime+.1;
-    engine.actx.resume();
-  }else engine.actx.suspend();
+    const p=audio.play();
+    if(p&&p.catch)p.catch(()=>{});
+    fadeTo(MUSIC.volume);
+  }else fadeTo(0,()=>audio.pause());
 }
-musicBtn.addEventListener('click',()=>{if(!engine)engine=buildEngine();setMusic(!musicOn);});
+musicBtn.addEventListener('click',()=>{ensureAudio();setMusic(!musicOn);});
 
 /* =========================================================
    4. Open the invitation
@@ -315,7 +246,7 @@ function finishOpen(){
 }
 openBtn.addEventListener('click',()=>{
   if(opened)return;opened=true;
-  if(!engine)engine=buildEngine();
+  ensureAudio();
   setMusic(true); // the tap doubles as the audio unlock
   const r=openBtn.getBoundingClientRect();
   burst(r.left+r.width/2,r.top+r.height/2);

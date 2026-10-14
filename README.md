@@ -6,8 +6,8 @@ Royal **maroon & gold heritage** design — deep maroon silks, antique gold
 foil and cream paper, with a ceremonial **opening overlay**: guests tap
 *Open the Invitation*, petals burst and the invitation rises. Ornaments (mandala, cusped arch, toran garland,
 paisley rules) are **drawn generatively in JavaScript** — no image
-assets beyond the couple photos — and the background melody is
-**generated live with Web Audio**, so there is no music file to ship.
+assets beyond the couple photos — and a looping background nasheed
+("NAFSIJI", `assets/music/nafsiji.mp3`) plays behind a floating note button.
 
 ## Features
 
@@ -35,8 +35,8 @@ assets beyond the couple photos — and the background melody is
   choice, seats stepper, song request and blessings field, sealed with
   an animated wax seal; a returning guest's reply is remembered and can
   be updated
-- **Generative melody** — algorithmic plucked-string music (Web Audio,
-  no audio file), toggled from the floating note button
+- **Background music** — a looping nasheed ("NAFSIJI",
+  `assets/music/nafsiji.mp3`), toggled from the floating note button
 - Toast notifications, `prefers-reduced-motion` honoured throughout,
   mobile-first with a full desktop layout
 
@@ -47,7 +47,8 @@ assets beyond the couple photos — and the background melody is
 | `index.html` | Page structure and display copy.                  |
 | `styles.css` | All styling; design tokens in `:root` at the top. |
 | `config.js`  | Values the script needs: wedding date, calendar, photos, RSVP. |
-| `script.js`  | Ornaments, petals, melody, intro, reveals, countdown, RSVP. |
+| `script.js`  | Ornaments, petals, background music, intro, reveals, countdown, RSVP. |
+| `assets/music/nafsiji.mp3` | Background nasheed — swap for the client's song. |
 | `assets/photos/groom.svg` | Groom placeholder artwork (The Couple). |
 | `assets/photos/bride.svg` | Bride placeholder artwork (The Couple). |
 | `assets/photos/couple.svg` | Couple placeholder artwork (Moments). |
@@ -88,6 +89,9 @@ Everything the **script** needs is in **`config.js`**:
   Regenerate it per client from the couple photo at 1200×750.
 - `rsvp.storageKey` / `rsvp.maxParty` — the localStorage key and the
   seats stepper cap.
+- `music.src` — the looping background nasheed
+  (`assets/music/nafsiji.mp3`); `music.volume` sets its level (0–1).
+  Replace the file with the client's song when known.
 
 Design tokens (maroon, gold, cream, fonts) are CSS variables in the
 `:root` block at the top of `styles.css`; recolour the whole page by

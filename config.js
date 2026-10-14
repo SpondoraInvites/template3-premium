@@ -44,6 +44,17 @@ const INVITE_CONFIG = {
     couple: "assets/photos/couple.svg",   // Moments — couple artwork, shown uncropped
   },
 
+  /* ---------- Background music ----------
+     A looping background nasheed ("NAFSIJI" — No Copyright Nasheed /
+     Halal Sounds) at assets/music/nafsiji.mp3. Swap the file for the
+     client's song when known. It never autoplays silently: the tap
+     that opens the invitation, or the floating note button, starts
+     it.                                                          */
+  music: {
+    src: "assets/music/nafsiji.mp3",
+    volume: 0.6,
+  },
+
   /* ---------- RSVP ----------
      Replies are remembered in the guest's own browser
      (localStorage) so a returning guest can update their reply.
