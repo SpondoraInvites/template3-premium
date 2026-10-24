@@ -31,6 +31,12 @@ assets beyond the couple photos — and a looping background nasheed
 - **Venue** — cusped (multifoil) arch drawn in code, Google Maps
   directions link, and a locally generated **Add-to-Calendar (.ics)**
   file
+- **Share** — copy the invitation link or hand it straight to WhatsApp,
+  Messenger, Telegram or email (all channels compose prefilled links,
+  no backend). An inline menu hangs under the venue section's *Share
+  this invitation* button, and a **floating share button** slides in at
+  the bottom-right — stacked above the music toggle — once the hero
+  scrolls out of view; menus close on outside-click or Escape
 - **RSVP** — live letterpress-style preview of the reply, attendance
   choice, seats stepper, song request and blessings field, sealed with
   an animated wax seal; a returning guest's reply is remembered and can
@@ -47,7 +53,7 @@ assets beyond the couple photos — and a looping background nasheed
 | `index.html` | Page structure and display copy.                  |
 | `styles.css` | All styling; design tokens in `:root` at the top. |
 | `config.js`  | Values the script needs: wedding date, calendar, photos, RSVP. |
-| `script.js`  | Ornaments, petals, background music, intro, reveals, countdown, RSVP. |
+| `script.js`  | Ornaments, petals, background music, intro, reveals, countdown, RSVP, share. |
 | `assets/music/nafsiji.mp3` | Background nasheed — swap for the client's song. |
 | `assets/photos/groom.svg` | Groom placeholder artwork (The Couple). |
 | `assets/photos/bride.svg` | Bride placeholder artwork (The Couple). |

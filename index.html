@@ -27,6 +27,7 @@
     #overlay,#petals{display:none}
     nav,#musicBtn{opacity:1!important;pointer-events:auto!important}
     .reveal,[data-st]{opacity:1!important;transform:none!important}
+    #floatShare{display:none}
   </style>
 </noscript>
 </head>
@@ -46,6 +47,7 @@
   <symbol id="i-note-off" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="2.6" fill="currentColor"/><circle cx="18" cy="16" r="2.6" fill="currentColor"/><path d="M4 4l16 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
   <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
   <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="12" r="2.7"/><circle cx="17.5" cy="5.5" r="2.7"/><circle cx="17.5" cy="18.5" r="2.7"/><path d="M8.4 10.7 L15.1 7"/><path d="M8.4 13.3 L15.1 17"/></g></symbol>
   <symbol id="paisley" viewBox="0 0 40 48">
     <path d="M26 3 C34 8 38 17 36 26 C33.5 38 24 46 13.5 43 C4 40.5 0 30 5.5 21.5 C9.5 15.5 17 15 20.5 20 C18 15.5 20 9 26 3 Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
     <path d="M22 12 C15 17 12.5 25 16 31 C19 35.5 25 34 25 29 C25 25 21.5 24 20 26.5" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
@@ -279,6 +281,16 @@
         <a class="btn dark" href="https://www.google.com/maps/place/Army+Golf+Club/@23.818986,90.4108514,17z/data=!4m10!1m2!2m1!1sarmy+golf+club!3m6!1s0x3755c657c7126a57:0xd172d1e852d49af4!8m2!3d23.8189868!4d90.4138031!15sCg5hcm15IGdvbGYgY2x1YloQIg5hcm15IGdvbGYgY2x1YpIBCWdvbGZfY2x1YpoBRENpOURRVWxSUVVOdlpFTm9kSGxqUmpsdlQycHNTVTVITlVOWlZrVjBUV3hvVUZWck5WUlRhMDQxWXpGS1VrNUdSUkFC4AEA-gEECAAQTA!16s%2Fg%2F1tg_j_mn?entry=ttu&amp;g_ep=EgoyMDI2MDkxNi4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener"><svg class="ic"><use href="#i-pin"/></svg>Get directions</a>
         <button class="btn dark" id="icsBtn"><svg class="ic"><use href="#i-cal"/></svg>Add to calendar</button>
       </div>
+      <div class="share reveal" style="--d:.4s">
+        <button class="btn dark" type="button" data-share-button aria-expanded="false" aria-controls="shareMenu"><svg class="ic"><use href="#i-share"/></svg>Share this invitation</button>
+        <div class="share-menu" id="shareMenu" data-share-menu hidden>
+          <button type="button" data-share="copy">Copy link</button>
+          <button type="button" data-share="whatsapp">WhatsApp</button>
+          <button type="button" data-share="messenger">Messenger</button>
+          <button type="button" data-share="telegram">Telegram</button>
+          <button type="button" data-share="email">Email</button>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -384,6 +396,20 @@
   <svg class="ic"><use href="#i-note"/></svg>
   <svg class="ic off"><use href="#i-note-off"/></svg>
 </button>
+
+<!-- Floating share — slides in above the music button once the hero scrolls out of view -->
+<div class="float-share" id="floatShare">
+  <div class="share-menu" id="shareMenuFloat" data-share-menu hidden>
+    <button type="button" data-share="copy">Copy link</button>
+    <button type="button" data-share="whatsapp">WhatsApp</button>
+    <button type="button" data-share="messenger">Messenger</button>
+    <button type="button" data-share="telegram">Telegram</button>
+    <button type="button" data-share="email">Email</button>
+  </div>
+  <button class="float-share-btn" type="button" data-share-button aria-expanded="false" aria-controls="shareMenuFloat" aria-label="Share the invitation">
+    <svg class="ic"><use href="#i-share"/></svg>
+  </button>
+</div>
 
 <div id="toasts" aria-live="polite"></div>
 

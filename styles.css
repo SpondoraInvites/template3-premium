@@ -3,7 +3,8 @@
    Royal maroon & gold heritage design. Design tokens live in the
    :root block at the top; section styles follow the page order
    (nav → opening overlay → hero → invitation → couple → gallery →
-   evening → countdown → venue → RSVP → footer → music/toasts).
+   evening → countdown → venue → share → RSVP → footer →
+   music/toasts/floating share).
    ============================================================ */
 
 /* ============ Foundations ============ */
@@ -225,6 +226,21 @@ nav.scrolled{background:rgba(43,10,8,.9);backdrop-filter:blur(10px);border-color
 .v-addr .ic{width:15px;height:15px;flex:none;margin-top:.4rem;color:var(--gold-deep)}
 .v-note{text-align:center;color:var(--ink-soft);font-size:.98rem;font-style:italic;margin:1rem auto 0}
 .v-actions{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-top:clamp(2.2rem,5vw,3rem)}
+
+/* ============ Share — inline menu (Venue) & floating share ============ */
+.share{display:flex;justify-content:center;position:relative;margin-top:1.4rem}
+.share-menu{position:absolute;top:calc(100% + .8rem);left:50%;transform:translate(-50%,-6px);display:flex;flex-wrap:wrap;justify-content:center;gap:.55rem;padding:.7rem;border:1px solid var(--hair-strong);background:rgba(43,10,8,.93);backdrop-filter:blur(8px);box-shadow:0 16px 36px rgba(0,0,0,.45);opacity:0;visibility:hidden;transition:opacity .3s ease,transform .3s ease,visibility 0s linear .3s;width:max-content;max-width:min(92vw,420px);z-index:60}
+.share-menu.open{opacity:1;visibility:visible;transform:translate(-50%,0);transition:opacity .3s ease,transform .3s ease}
+.share-menu button{appearance:none;font-family:var(--sans);font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--cream);background:transparent;border:1px solid var(--hair-strong);padding:.7em 1.2em;cursor:pointer;transition:background .25s,color .25s,border-color .25s}
+.share-menu button:hover,.share-menu button:focus-visible{background:var(--gold);color:var(--maroon-3);border-color:var(--gold)}
+.float-share{position:fixed;right:1.15rem;bottom:4.55rem;z-index:70;display:flex;flex-direction:column;align-items:flex-end;gap:.6rem;opacity:0;visibility:hidden;transform:translateX(18px);pointer-events:none;transition:opacity .5s ease,transform .5s ease,visibility 0s linear .5s}
+.float-share.show{opacity:1;visibility:visible;transform:none;pointer-events:auto;transition:opacity .5s ease,transform .5s ease}
+.float-share-btn{width:46px;height:46px;border-radius:50%;border:1px solid var(--gold);background:rgba(43,10,8,.88);backdrop-filter:blur(6px);color:var(--gold);cursor:pointer;display:grid;place-items:center;box-shadow:0 12px 30px rgba(0,0,0,.4);transition:background .3s,color .3s}
+.float-share-btn:hover,.float-share-btn:focus-visible{background:var(--gold);color:var(--maroon-3)}
+.float-share-btn .ic{width:19px;height:19px}
+.float-share .share-menu{top:auto;left:auto;right:0;bottom:calc(100% + .7rem);transform:translateY(6px);flex-direction:column;align-items:stretch;border-radius:0}
+.float-share .share-menu.open{transform:none}
+.float-share .share-menu button{text-align:left}
 
 /* ============ RSVP ============ */
 .rsvp-card{max-width:740px;margin:0 auto;position:relative;border:1px solid var(--hair-strong);background:var(--maroon-2);padding:clamp(2rem,6vw,3.4rem)}

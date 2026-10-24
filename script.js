@@ -2,8 +2,8 @@
    PREMIUM TEMPLATE — SCRIPT
    Generated ornaments (mandala, arch, toran, rules), falling
    petals canvas, generative plucked-string melody, the opening
-   overlay, scroll reveals, live countdown, add-to-calendar
-   and the RSVP form.
+   overlay, scroll reveals, live countdown, add-to-calendar,
+   the RSVP form and the share menu.
    Client values (wedding date, calendar, photos, RSVP) come from
    config.js — edit that file, not this one.
    ============================================================ */
@@ -388,4 +388,85 @@ try{
   }
 }catch(_){}
 updatePreview();
+
+/* =========================================================
+   10. Share — copy the link or hand it to WhatsApp,
+       Messenger, Telegram or email. One behaviour shared by
+       the Venue's inline menu and the floating button; no
+       backend — each channel composes a prefilled link, and
+       copying falls back to execCommand for non-secure pages.
+   ========================================================= */
+const enc=encodeURIComponent;
+const shareLink=()=>location.href;
+const shareText=()=>{
+  const when=new Intl.DateTimeFormat('en',{dateStyle:'full'}).format(new Date(CFG.weddingDateTime));
+  return `${CFG.calendar.title} · ${when}`;
+};
+const shareActions={
+  async copy(){
+    let done=false;
+    try{
+      await navigator.clipboard.writeText(shareLink());
+      done=true;
+    }catch(_){
+      /* Clipboard API needs a secure context — fall back for plain http:// */
+      const ta=document.createElement('textarea');
+      ta.value=shareLink();ta.style.position='fixed';ta.style.opacity='0';
+      document.body.appendChild(ta);ta.select();
+      try{done=document.execCommand('copy');}catch(__){done=false;}
+      ta.remove();
+    }
+    toast(done
+      ?'Link copied — share the joy'
+      :'Could not copy here — please copy the link from the address bar');
+  },
+  whatsapp:()=>window.open(`https://wa.me/?text=${enc(`${shareText()}\n${shareLink()}`)}`,'_blank','noopener'),
+  /* shortcut: deep link only opens the Messenger app (mobile); the desktop
+     web dialog needs a registered Facebook app ID */
+  messenger:()=>window.open(`fb-messenger://share/?link=${enc(shareLink())}`,'_blank','noopener'),
+  telegram:()=>window.open(`https://t.me/share/url?url=${enc(shareLink())}&text=${enc(shareText())}`,'_blank','noopener'),
+  email:()=>{location.href=`mailto:?subject=${enc(shareText())}&body=${enc(`${shareText()}\n${shareLink()}`)}`;},
+};
+const sharePairs=[];
+$$('[data-share-button]').forEach(btn=>{
+  const menu=document.getElementById(btn.getAttribute('aria-controls')||'');
+  if(!menu)return;
+  menu.hidden=false; /* JS is healthy — visibility moves to the .open class */
+  const setOpen=o=>{
+    menu.classList.toggle('open',o);
+    btn.setAttribute('aria-expanded',String(o));
+  };
+  btn.addEventListener('click',()=>setOpen(!menu.classList.contains('open')));
+  document.addEventListener('click',e=>{
+    if(menu.classList.contains('open')&&!menu.contains(e.target)&&e.target.closest('[data-share-button]')!==btn)setOpen(false);
+  });
+  for (const b of menu.querySelectorAll('[data-share]')) {
+    const fn=shareActions[b.dataset.share];
+    if(!fn)continue;
+    b.addEventListener('click',()=>{
+      fn();
+      if(b.dataset.share!=='copy')setOpen(false); /* copy lingers so the feedback toast reads beside the menu */
+    });
+  }
+  sharePairs.push({btn,menu,setOpen});
+});
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Escape')return;
+  sharePairs.forEach(({btn,menu,setOpen})=>{
+    if(menu.classList.contains('open')){setOpen(false);btn.focus();}
+  });
+});
+
+/* Floating share — slides in above the music button once the hero
+   has scrolled out of view (and only once the page is revealed). */
+const hero=$('.hero'),floatShare=$('#floatShare');
+if(hero&&floatShare){
+  const update=()=>{
+    const past=hero.getBoundingClientRect().bottom<innerHeight*.4;
+    floatShare.classList.toggle('show',past&&document.body.classList.contains('revealed'));
+  };
+  update();
+  addEventListener('scroll',update,{passive:true});
+  addEventListener('resize',update);
+}
 })();
