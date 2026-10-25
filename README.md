@@ -40,7 +40,7 @@ assets beyond the couple photos — and a looping background nasheed
 - **RSVP** — live letterpress-style preview of the reply, attendance
   choice, seats stepper, song request and blessings field, sealed with
   an animated wax seal; a returning guest's reply is remembered and can
-  be updated
+  be updated; opens WhatsApp with the answers pre-typed for the couple
 - **Background music** — a looping nasheed ("NAFSIJI",
   `assets/music/nafsiji.mp3`), toggled from the floating note button
 - Toast notifications, `prefers-reduced-motion` honoured throughout,
@@ -95,6 +95,8 @@ Everything the **script** needs is in **`config.js`**:
   Regenerate it per client from the couple photo at 1200×750.
 - `rsvp.storageKey` / `rsvp.maxParty` — the localStorage key and the
   seats stepper cap.
+- `rsvp.whatsapp` — the couple's WhatsApp number in international
+  format, digits only, no `+`. Replace the example number before deploying.
 - `music.src` — the looping background nasheed
   (`assets/music/nafsiji.mp3`); `music.volume` sets its level (0–1).
   Replace the file with the client's song when known.
@@ -105,11 +107,14 @@ changing `--maroon`, `--gold` and `--cream`.
 
 ### RSVP delivery
 
-Replies are remembered **in the guest's own browser** only — the couple
-is not notified. If delivery is needed, extend the `submit` handler in
-`script.js` (search for `am_rsvp_v1` → `rsvp.storageKey`) the way the
-Signature/Luxury templates do: open WhatsApp with the answers pre-typed
-and/or POST to a Formspree-style endpoint.
+Submitting opens WhatsApp addressed to `rsvp.whatsapp` with the guest's
+name, attendance, party size (if attending), song request and blessings
+pre-typed. **The guest must press Send in WhatsApp** to deliver the reply;
+opening WhatsApp alone does not send it. No backend is needed.
+
+Replies are also remembered **in the guest's own browser** so returning
+guests can edit and resubmit them. Set `rsvp.whatsapp` to `""` to keep
+replies browser-only without opening WhatsApp.
 
 ## Running locally
 

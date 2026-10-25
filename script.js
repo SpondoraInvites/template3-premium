@@ -364,14 +364,25 @@ form.addEventListener('submit',e=>{
   nameField.classList.remove('error');
   const data={n,att:attY.checked?'yes':'no',g:parseInt(gNum.textContent),
     song:$('#fSong').value.trim(),notes:$('#fNotes').value.trim(),ts:Date.now()};
+  if(CFG.rsvp.whatsapp){
+    const lines=[`RSVP — ${CFG.calendar.title}`,`Name: ${data.n}`,
+      data.att==='yes'
+        ?`Attending: Joyfully, yes (${data.g} guest${data.g===1?'':'s'})`
+        :'Attending: Regretfully, no'];
+    if(data.song)lines.push(`Song request: ${data.song}`);
+    if(data.notes)lines.push(`Message: ${data.notes}`);
+    window.open(`https://wa.me/${CFG.rsvp.whatsapp.replace(/[^\d]/g,'')}?text=${encodeURIComponent(lines.join('\n'))}`,'_blank','noopener');
+  }
   try{localStorage.setItem(LS,JSON.stringify(data));}catch(_){}
   cName.textContent=n.split(' ')[0];
-  cBody.textContent=data.att==='yes'
+  cBody.textContent=CFG.rsvp.whatsapp
+    ?'We opened WhatsApp with your answers — just press send to deliver your reply to the couple.'
+    :data.att==='yes'
     ?`Your reply has reached us with joy. We will keep seats for your party of ${WORDS[data.g]} — and save you the first slice of cake.`
     :'You will be dearly missed on the fourteenth of February — but your blessings travel with us. Thank you for letting us know.';
   form.style.display='none';
   confirmEl.classList.add('show');
-  toast(data.att==='yes'?'Your reply has been sealed — thank you':'Thank you for letting us know');
+  toast(CFG.rsvp.whatsapp?'Your reply is ready in WhatsApp — just press send':data.att==='yes'?'Your reply has been sealed — thank you':'Thank you for letting us know');
 });
  $('#editReply').addEventListener('click',()=>{
   confirmEl.classList.remove('show');form.style.display='';
